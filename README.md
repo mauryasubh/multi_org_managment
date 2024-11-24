@@ -56,9 +56,12 @@ This project is a Django-based web application designed to manage multiple organ
 
 5. **Create Superusers**:
    - Create the Admin Superuser:
+   - use any password and username 
+   
      ```bash
      python manage.py createsuperuser
      ```
+     -to test directlty use below credentials
      Use the following credentials when prompted:
      - Username: `admin`
      - Password: `admin`
