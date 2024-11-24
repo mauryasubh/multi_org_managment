@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="bg-white p-6 shadow-md rounded-lg max-w-5xl mx-auto mt-8">
+        <h1 class="text-2xl font-bold text-center mb-6">Organization Details</h1>
+
+            {% comment %} {% if messages %}
+            <div id="messages_id" class="bg-red-500 text-white py-2 text-center mb-6">
+                <p>{{ messages }}</p>
+            </div>
+            {% endif %} {% endcomment %} 
+            
+
+
+         <!-- Add Button for Creating Sub-Organization -->
+            <div  class="flex justify-start mb-6">
+                <a href="{% url 'create_sub_organization' %}" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md">
+                    + Create Sub-Organization
+                </a>
+            </div>
+
+        {% if main_organizations %}
+            <div class="mb-6">
+                <h2 class="text-xl font-semibold mb-2">Main Organizations</h2>
+                <ul class="list-disc ml-6">
+                    {% for org in main_organizations %}
+                        <li class="text-lg">{{ org.name }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <p>No main organizations found.</p>
+        {% endif %}
+
+        {% if sub_organizations %}
+            <div class="mt-8">
+                <h2 class="text-xl font-semibold mb-2">Sub-Organizations</h2>
+                <table class="min-w-full bg-white border border-gray-300 mt-4">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="py-2 px-4 border-b text-left">Name</th>
+                            <th class="py-2 px-4 border-b text-left">Address</th>
+                            <th class="py-2 px-4 border-b text-left">Actions</th>
+                            <th class="py-2 px-4 border-b text-left">Sub-Organizations User  </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sub_org in sub_organizations %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-2 px-4 border-b">{{ sub_org.name }}</td>
+                                <td class="py-2 px-4 border-b">
+                                    {% if sub_org.address %}
+                                        {{ sub_org.address|slice:":30" }}{% if sub_org.address|length > 30 %}...{% endif %}
+                                    {% else %}
+                                        N/A
+                                    {% endif %}
+                                </td>
+                                <td class="py-2 px-4 border-b">
+                                    <a href="{% url 'update_sub_organization' sub_org.id  %}" class="text-blue-500 hover:text-blue-700">Update</a> |
+                                    <!-- Delete link with JavaScript confirmation -->
+                                    <a href="{% url 'delete_sub_org' sub_org.id  %}" class="text-red-500 hover:text-red-700"
+                                       onclick="return confirmDeletion();">
+                                       Delete
+                                    </a>
+                                </td>
+                                <td class="py-2 px-4 border-b">
+                                    <a href="{% url 'user_list' %}" class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-md inline-block">
+                                        User Control Page
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p>No sub-organizations found.</p>
+        {% endif %}
+    </div>
+
+    <!-- JavaScript function for confirmation diadelete  -->
+    <script>
+        function confirmDeletion() {
+            return confirm('Are you sure you want to delete this sub-organization?');
+        }
+
+        setTimeout(function() {
+            var messageElement = document.getElementById('messages_id');
+            if (messageElement) {
+                messageElement.style.display = 'none';
+            }
+        }, 5000); // 5000 milliseconds = 5 seconds
+
+    </script>
+{% endblock %}

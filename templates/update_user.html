@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white p-6 shadow-md rounded-lg">
+        <h1 class="text-2xl font-bold text-center mb-6">Update User</h1>
+
+        {% comment %} {% if messages %}
+            <div class="bg-red-500 text-white py-2 text-center mb-6">
+                <p>{{ messages }}</p>
+            </div>
+        {% endif %} {% endcomment %}
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                <input type="text" id="username" name="username" value="{{ user.username }}" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm" required>
+            </div>
+
+            <div class="mb-4">
+                <label for="password" class="block text-sm font-medium text-gray-700">Password (Leave blank to keep current)</label>
+                <input type="password" id="password" name="password" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm">
+            </div>
+
+            <div class="mb-4">
+                <label for="organization" class="block text-sm font-medium text-gray-700">Organization</label>
+                <select id="organization" name="organization" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm" required>
+                    {% for org in sub_organizations %}
+                        <option value="{{ org.id }}" {% if user.organization.id == org.id %}selected{% endif %}>{{ org.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label for="role" class="block text-sm font-medium text-gray-700">Role</label>
+                <select id="role" name="role" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm" required>
+                    {% for role in roles %}
+                        <option value="{{ role.id }}" {% if user_role.id == role.id %}selected{% endif %}>{{ role.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md">Update User</button>
+        </form>
+    </div>
+{% endblock %}
